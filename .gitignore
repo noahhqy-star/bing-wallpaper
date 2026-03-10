@@ -7,6 +7,8 @@ out/
 
 # Database (runtime data)
 db/*.db
+db/*.db-wal
+db/*.db-shm
 
 # Old data files (keep for migration reference only)
 bing_data/

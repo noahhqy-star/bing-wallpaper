@@ -1,28 +1,91 @@
-## 必应壁纸
+# 🌄 Bing Wallpaper
 
-### 一些可有可无的说明
+每日自动抓取必应 (Bing) 首页壁纸，提供高清图片浏览、下载和图片故事阅读。
 
-该项目基于 next.js 开发，服务端渲染 react 项目。
+> 在线预览：[hulanlan.com](https://hulanlan.com)
 
-项目的默认端口为 3002，可以在 `app.js` 里修改，项目启动后的爬虫接口在
-`util/updateData.js` 文件中，每天12点定时爬取，数据会存储在
-`bing_data/` 文件夹下。目前并没有将图片另外保存至其他地方，
-只保存了图片路径。
+## ✨ 功能特性
 
-### 开发
+- 📸 **每日壁纸** — 自动抓取必应每日精选壁纸
+- 🎲 **随机浏览** — 随机查看历史壁纸
+- 📖 **图片故事** — 阅读每张壁纸背后的故事
+- 📥 **多尺寸下载** — 支持 UHD / 1920×1080 / 手机尺寸等多种分辨率
+- 🖥️ **全屏模式** — 沉浸式壁纸浏览体验
+- ⌨️ **键盘导航** — 左右方向键快速切换壁纸
 
-```shell script
-git clone https://github.com/jsososo/Bing.git
+## 🛠️ 技术栈
 
-yarn
+| 类别 | 技术 |
+|------|------|
+| 前端框架 | Next.js 14 + React 18 |
+| UI 组件 | Ant Design 5 |
+| 样式 | SCSS + Google Fonts (Inter) |
+| 数据库 | SQLite (better-sqlite3) |
+| 数据来源 | Bing Image API |
+| 日期处理 | Day.js |
 
-yarn dev
+## 🚀 本地开发
+
+```bash
+# 安装依赖
+npm install
+
+# 如有历史数据需要迁移
+npm run migrate
+
+# 开发模式
+npm run dev
+
+# 访问 http://localhost:3002
 ```
 
-### 部署
+## 📦 部署
 
-```shell script
-yarn build
+```bash
+# 构建
+npm run build
 
-yarn start
+# 生产模式运行
+npm run start
+
+# 使用 pm2 守护进程（推荐）
+pm2 start app.js --name bing-wallpaper
 ```
+
+### Nginx 反向代理配置
+
+```nginx
+location ^~ / {
+    proxy_pass http://127.0.0.1:3002;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection $connection_upgrade;
+    proxy_http_version 1.1;
+}
+```
+
+## 📁 项目结构
+
+```
+├── app.js              # 服务入口 & HTTP 服务器
+├── db/
+│   ├── index.js        # SQLite 数据库初始化
+│   └── migrate.js      # JSON → SQLite 数据迁移脚本
+├── lib/
+│   ├── crawler.js      # 壁纸数据爬虫 & 图片故事获取
+│   └── dataStore.js    # 数据访问层 (CRUD)
+├── pages/
+│   ├── index.js        # 首页 - 壁纸瀑布流
+│   ├── [date].js       # 详情页 - 壁纸大图 & 信息
+│   └── api/            # API 路由
+├── components/
+│   ├── DownDialog.js   # 下载弹框
+│   └── StoryDialog.js  # 图片故事弹框
+└── styles/             # SCSS 样式文件
+```
+
+## 📄 License
+
+MIT
