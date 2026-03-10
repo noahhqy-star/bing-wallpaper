@@ -1,0 +1,21 @@
+{
+  "name": "bing-wallpaper",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "node app dev",
+    "build": "next build",
+    "start": "node app",
+    "migrate": "node db/migrate.js"
+  },
+  "dependencies": {
+    "antd": "^5.22.0",
+    "axios": "^1.7.9",
+    "better-sqlite3": "^11.7.0",
+    "dayjs": "^1.11.13",
+    "next": "^14.2.21",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "sass": "^1.89.2"
+  }
+}

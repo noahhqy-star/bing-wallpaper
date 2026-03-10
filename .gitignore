@@ -1,0 +1,30 @@
+# Dependencies
+node_modules/
+
+# Next.js build
+.next/
+out/
+
+# Database (runtime data)
+db/*.db
+
+# Old data files (keep for migration reference only)
+bing_data/
+
+# Logs
+logs/
+
+# System
+.DS_Store
+
+# Environment
+.env
+.env.local
+
+# IDE
+.idea/
+.vscode/
+
+# Misc
+index.html
+404.html
