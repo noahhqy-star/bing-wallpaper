@@ -134,6 +134,14 @@ export default function DatePage({ img, timeout, nextKey }) {
   const imageTitle = img.title || null;
   const isCurrentYear = imgDate.year() === dayjs().year();
 
+  const getLocationSearchUrl = (copyright) => {
+    if (!copyright) return null;
+    const match = copyright.split('(')[0].trim();
+    if (!match || match.length < 2) return null;
+    return `https://earth.google.com/web/search/${encodeURIComponent(match)}`;
+  };
+  const earthUrl = getLocationSearchUrl(img.cp);
+
   return (
     <Spin spinning={loading} size="large">
       <div className={`detail-page ${isMobile ? 'mobile-mode' : ''}`} onMouseMove={onMouseMove}>
@@ -178,7 +186,7 @@ export default function DatePage({ img, timeout, nextKey }) {
               {[{ key: 'next', arrow: 'left', target: hasNext }, { key: 'prev', arrow: 'right', target: img.prev }].map(
                 ({ key, arrow, target }) =>
                   target ? (
-                    <div
+                     <div
                       key={`page-${arrow}`}
                       className={`page-icon icon-${arrow} ${(showBottom || isMobile) ? 'actived' : ''}`}
                       onClick={() => changePosition(key)}
@@ -215,6 +223,15 @@ export default function DatePage({ img, timeout, nextKey }) {
                       <i className="iconfont icon-touzi" />
                     </a>
                     <div className="action-divider" />
+                    {earthUrl && (
+                      <a href={earthUrl} target="_blank" rel="noreferrer" className="action-item" title="在地球中探索">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                          <circle cx="12" cy="12" r="10" />
+                          <line x1="2" y1="12" x2="22" y2="12" />
+                          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                        </svg>
+                      </a>
+                    )}
                     <div className="action-item" onClick={() => setStoryDialogVisible(true)} title="图片故事">
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                         <circle cx="12" cy="12" r="10" />
