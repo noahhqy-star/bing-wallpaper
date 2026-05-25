@@ -20,6 +20,14 @@
     {
       "pattern": "www.hulanlan.com/*",
       "zone_name": "hulanlan.com"
+    },
+    {
+      "pattern": "tiaotiao.fun/*",
+      "zone_name": "tiaotiao.fun"
+    },
+    {
+      "pattern": "www.tiaotiao.fun/*",
+      "zone_name": "tiaotiao.fun"
     }
   ],
   "services": [
