@@ -3,6 +3,8 @@ node_modules/
 
 # Next.js build
 .next/
+.open-next/
+.wrangler/
 out/
 
 # Database (runtime data)

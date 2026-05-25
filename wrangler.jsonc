@@ -1,0 +1,43 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "bing-wallpaper",
+  "main": "custom-worker.js",
+  "workers_dev": true,
+  "compatibility_date": "2026-05-25",
+  "compatibility_flags": [
+    "nodejs_compat",
+    "global_fetch_strictly_public"
+  ],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "routes": [
+    {
+      "pattern": "hulanlan.com/*",
+      "zone_name": "hulanlan.com"
+    },
+    {
+      "pattern": "www.hulanlan.com/*",
+      "zone_name": "hulanlan.com"
+    }
+  ],
+  "services": [
+    {
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "bing-wallpaper"
+    }
+  ],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "bing-wallpaper",
+      "database_id": "21843afa-21ef-4071-9c14-6a593d86274f"
+    }
+  ],
+  "triggers": {
+    "crons": [
+      "15 16 * * *"
+    ]
+  }
+}

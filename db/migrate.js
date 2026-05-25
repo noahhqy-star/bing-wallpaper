@@ -38,10 +38,10 @@ async function migrate() {
 
     // 批量插入
     console.log('⏳ 正在导入数据...');
-    bulkInsert(images);
+    await bulkInsert(images);
 
     // 验证
-    const count = getImageCount();
+    const count = await getImageCount();
     console.log(`\n✅ 迁移完成！SQLite 中共 ${count} 条记录`);
 
     if (count === images.length) {

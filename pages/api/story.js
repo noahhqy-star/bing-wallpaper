@@ -1,6 +1,6 @@
 import { getImageByDate } from '../../lib/dataStore';
 
-export default function handler(req, res) {
+export default async function handler(req, res) {
   const { date } = req.query;
 
   if (!date) {
@@ -8,7 +8,7 @@ export default function handler(req, res) {
   }
 
   try {
-    const imgData = getImageByDate(date);
+    const imgData = await getImageByDate(date);
 
     if (!imgData) {
       return res.status(404).json({ error: '未找到该日期的图片数据' });

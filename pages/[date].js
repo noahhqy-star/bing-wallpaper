@@ -12,16 +12,16 @@ export async function getServerSideProps(context) {
 
   let img;
   if (date === 'random') {
-    img = getRandomImage();
+    img = await getRandomImage();
   } else {
-    img = getImageByDate(date);
+    img = await getImageByDate(date);
   }
 
   if (!img) {
     return { props: { img: null } };
   }
 
-  const adjacent = getAdjacentDates(img.date);
+  const adjacent = await getAdjacentDates(img.date);
   const now = dayjs();
   const tomorrow = now.add(1, 'day').startOf('day');
 
