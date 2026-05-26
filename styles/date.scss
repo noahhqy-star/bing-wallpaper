@@ -126,7 +126,7 @@
                     transition: transform 0.25s ease;
                 }
 
-                svg.expanded {
+                svg.collapsed {
                     transform: rotate(180deg);
                 }
             }
