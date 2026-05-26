@@ -12,7 +12,7 @@ function MyApp({ Component, pageProps }) {
       <Head>
         <title>必应壁纸 - 每日精选</title>
         <meta name="description" content="每日必应高清壁纸" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Component {...pageProps} />

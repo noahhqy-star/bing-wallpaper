@@ -124,9 +124,14 @@ export default function DatePage({ img, timeout, nextKey }) {
   };
 
   useEffect(() => {
+    if (isMobile) {
+      setShowBottom(true);
+      return undefined;
+    }
+
     const tick = setTimeout(() => setShowBottom(false), 5000);
     return () => clearTimeout(tick);
-  }, [now]);
+  }, [isMobile, now]);
 
   if (!img || !img.date) return <Error statusCode={404} />;
 
