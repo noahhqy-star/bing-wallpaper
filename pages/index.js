@@ -109,9 +109,8 @@ export default function IndexPage() {
         }}
       >
         {list.map((img) => (
-          <div className="img-item" style={img.style} key={img.date}>
+          <a className="img-item" style={img.style} key={img.date} href={`/${img.date}`}>
             <div className="cover">
-              <a className="iconfont icon-eye" href={`/${img.date}`} />
               <span className="text">{img.copyright}</span>
             </div>
             <div className={`date-str size-${img.span}`}>{img.dateStr}</div>
@@ -121,7 +120,7 @@ export default function IndexPage() {
                 backgroundImage: `url('//cn.bing.com${img.urlbase}_1024x768.jpg')`,
               }}
             />
-          </div>
+          </a>
         ))}
       </div>
       {isEmpty && <div className="empty-text">—— 到底啦 ——</div>}

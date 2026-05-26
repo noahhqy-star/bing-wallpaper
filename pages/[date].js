@@ -50,6 +50,7 @@ export default function DatePage({ img, timeout, nextKey }) {
   const [isMobile, setIsMobile] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [hasNext, setHasNext] = useState(img ? img.next : null);
+  const [infoExpanded, setInfoExpanded] = useState(true);
 
   const checkMode = useCallback(() => {
     setIsMobile(window.innerWidth < 1024 || window.innerWidth < window.innerHeight);
@@ -201,7 +202,19 @@ export default function DatePage({ img, timeout, nextKey }) {
                   ) : null
               )}
 
-              <div className={`img-info ${!showBottom ? 'collapsed' : ''}`}>
+              <div className={`img-info ${(!showBottom || (isMobile && !infoExpanded)) ? 'collapsed' : ''}`}>
+                {isMobile && (
+                  <button
+                    className="mobile-info-toggle"
+                    onClick={() => setInfoExpanded((expanded) => !expanded)}
+                    aria-label={infoExpanded ? '收起图片信息' : '展开图片信息'}
+                    type="button"
+                  >
+                    <svg className={infoExpanded ? 'expanded' : ''} width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="6 9 12 15 18 9" />
+                    </svg>
+                  </button>
+                )}
                 <div className="img-title">
                   {imageTitle && imageTitle.trim() ? imageTitle : ''}
                 </div>

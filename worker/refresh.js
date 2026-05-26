@@ -1,4 +1,4 @@
-const BING_API_URL = 'https://cn.bing.com/HPImageArchive.aspx?format=js&idx=0&n=8&pid=hp';
+const BING_API_URL = 'https://cn.bing.com/HPImageArchive.aspx?format=js&idx=0&n=8&mkt=zh-CN&cc=cn&setlang=zh-CN&pid=hp';
 const STORY_API_URL = 'https://bing.ee123.net/img/';
 
 function timestamp() {
@@ -62,6 +62,7 @@ export async function refreshBingImages(env) {
 
   const response = await fetch(BING_API_URL, {
     headers: {
+      'accept-language': 'zh-CN,zh;q=0.9',
       'user-agent': 'bing-wallpaper-refresh/1.0',
     },
   });
