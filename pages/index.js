@@ -49,7 +49,9 @@ export default function IndexPage({ locale = 'zh-CN' }) {
             gridColumnStart: `span ${span}`,
             gridRowStart: `span ${span}`,
           };
-          item.dateStr = dayjs(String(item.date), 'YYYYMMDD').format('YY.MM.DD');
+          item.dateStr = locale === EN_LOCALE
+            ? dayjs(String(item.date), 'YYYYMMDD').format('MMM D')
+            : dayjs(String(item.date), 'YYYYMMDD').format('M月D日');
           item.span = span;
         });
 

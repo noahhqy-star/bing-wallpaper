@@ -49,27 +49,27 @@
         z-index: 2;
         display: inline-flex;
         align-items: center;
-        padding: 5px 7px;
-        border-radius: 7px;
-        color: rgba(255, 255, 255, 0.76);
-        background: rgba(12, 15, 18, 0.16);
-        border: 1px solid rgba(255, 255, 255, 0.11);
-        font-size: 12px;
+        padding: 4px 7px;
+        border-radius: 6px;
+        color: rgba(255, 255, 255, 0.66);
+        background: rgba(12, 15, 18, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        font-size: 11px;
         line-height: 1;
-        font-weight: 650;
+        font-weight: 600;
         box-shadow:
-          0 6px 16px rgba(0, 0, 0, 0.1),
-          inset 0 1px 0 rgba(255, 255, 255, 0.08);
-        backdrop-filter: blur(10px) saturate(1.2);
-        -webkit-backdrop-filter: blur(10px) saturate(1.2);
+          0 5px 14px rgba(0, 0, 0, 0.08),
+          inset 0 1px 0 rgba(255, 255, 255, 0.06);
+        backdrop-filter: blur(9px) saturate(1.15);
+        -webkit-backdrop-filter: blur(9px) saturate(1.15);
         transition: opacity 0.3s ease, background 0.3s ease, border-color 0.3s ease;
-        opacity: 0.78;
+        opacity: 0.68;
 
         &.size-2 {
           top: 12px;
           left: 12px;
-          padding: 6px 8px;
-          font-size: 13px;
+          padding: 5px 8px;
+          font-size: 12px;
         }
       }
 
@@ -97,9 +97,9 @@
         }
 
         .date-str {
-          opacity: 1;
-          background: rgba(12, 15, 18, 0.24);
-          border-color: rgba(255, 255, 255, 0.18);
+          opacity: 0.9;
+          background: rgba(12, 15, 18, 0.2);
+          border-color: rgba(255, 255, 255, 0.14);
         }
 
       }
@@ -187,10 +187,10 @@
         .date-str {
           top: 9px;
           left: 9px;
-          padding: 5px 7px;
+          padding: 4px 7px;
           border-radius: 6px;
-          opacity: 0.72;
-          font-size: 12px;
+          opacity: 0.62;
+          font-size: 11px;
         }
       }
     }
