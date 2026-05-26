@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import dayjs from 'dayjs';
 import Head from 'next/head';
+import { EN_LOCALE, getLocaleCode, getLocalePrefix, getOtherLocale, withLocalePath } from '../lib/locale';
 
-export default function IndexPage() {
+export default function IndexPage({ locale = 'zh-CN' }) {
   const [list, setList] = useState([]);
   const [nextDate, setNextDate] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -12,6 +13,9 @@ export default function IndexPage() {
 
   const pageRef = useRef();
   const loadingRef = useRef(false);
+  const localePrefix = getLocalePrefix(locale);
+  const otherLocale = getOtherLocale(locale);
+  const languageLabel = locale === EN_LOCALE ? '中' : 'EN';
 
   const checkMode = useCallback(() => {
     const mobile = window.innerWidth < 1024 || window.innerWidth < window.innerHeight;
@@ -24,7 +28,7 @@ export default function IndexPage() {
     loadingRef.current = true;
     setLoading(true);
 
-    fetch(`/api/list?date=${date}&count=10`)
+    fetch(`/api/list?date=${date}&count=10&locale=${encodeURIComponent(locale)}`)
       .then((res) => res.json())
       .then(({ data }) => {
         if (!data || data.length === 0) {
@@ -97,7 +101,7 @@ export default function IndexPage() {
   return (
     <div className={`index-page ${isMobile ? 'mobile-page' : ''}`} ref={pageRef}>
       <Head>
-        <title>必应壁纸 - 每日精选</title>
+        <title>{locale === EN_LOCALE ? 'Bing Wallpaper - Daily Picks' : '必应壁纸 - 每日精选'}</title>
       </Head>
       <div id="head" />
       <div
@@ -109,7 +113,7 @@ export default function IndexPage() {
         }}
       >
         {list.map((img) => (
-          <a className="img-item" style={img.style} key={img.date} href={`/${img.date}`}>
+          <a className="img-item" style={img.style} key={img.date} href={withLocalePath(locale, String(img.date))}>
             <div className="cover">
               <span className="text">{img.copyright}</span>
             </div>
@@ -134,7 +138,14 @@ export default function IndexPage() {
             <polyline points="18 15 12 9 6 15" />
           </svg>
         </div>
-        <a href="/random" className="float-btn" title="随机壁纸">
+        <a
+          href={withLocalePath(otherLocale)}
+          className="float-btn language-toggle"
+          title={locale === EN_LOCALE ? '切换到中文' : 'Switch to English'}
+        >
+          {languageLabel}
+        </a>
+        <a href={`${localePrefix}/random`} className="float-btn" title={locale === EN_LOCALE ? 'Random wallpaper' : '随机壁纸'}>
           <i className="iconfont icon-touzi" />
         </a>
       </div>

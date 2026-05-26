@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 
-const StoryDialog = ({ visible, imgInfo, onHide }) => {
+const StoryDialog = ({ visible, imgInfo, locale = 'zh-CN', onHide }) => {
   const [title, setTitle] = useState('');
   const [storyContent, setStoryContent] = useState('');
   const [loading, setLoading] = useState(false);
@@ -28,7 +28,7 @@ const StoryDialog = ({ visible, imgInfo, onHide }) => {
   useEffect(() => {
     if (visible && imgInfo && imgInfo.date) {
       setLoading(true);
-      fetch(`/api/story?date=${imgInfo.date}`)
+      fetch(`/api/story?date=${imgInfo.date}&locale=${encodeURIComponent(locale)}`)
         .then((response) => {
           if (!response.ok) throw new Error('获取故事数据失败');
           return response.json();

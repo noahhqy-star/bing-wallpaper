@@ -5,23 +5,38 @@ import DownDialog from '../components/DownDialog';
 import StoryDialog from '../components/StoryDialog';
 import Error from 'next/error';
 import Head from 'next/head';
+import { EN_LOCALE, getLocalePrefix, getOtherLocale, normalizeLocale, withLocalePath } from '../lib/locale';
 
-export async function getServerSideProps(context) {
-  const { getImageByDate, getAdjacentDates, getRandomImage } = require('../lib/dataStore');
+export async function getDatePageProps(context, requestedLocale = 'zh-CN') {
+  const { getImageByDate, getAdjacentDates, getRandomImage, getLatestDate } = require('../lib/dataStore');
   const { date } = context.query;
+  const locale = normalizeLocale(requestedLocale);
+  const localePrefix = getLocalePrefix(locale);
 
   let img;
   if (date === 'random') {
-    img = await getRandomImage();
+    img = await getRandomImage(locale);
   } else {
-    img = await getImageByDate(date);
+    img = await getImageByDate(date, locale);
+  }
+
+  if (!img && locale === EN_LOCALE) {
+    const latestDate = await getLatestDate(locale);
+    if (latestDate) {
+      return {
+        redirect: {
+          destination: `${localePrefix}/${latestDate}`,
+          permanent: false,
+        },
+      };
+    }
   }
 
   if (!img) {
     return { props: { img: null } };
   }
 
-  const adjacent = await getAdjacentDates(img.date);
+  const adjacent = await getAdjacentDates(img.date, locale);
   const now = dayjs();
   const tomorrow = now.add(1, 'day').startOf('day');
 
@@ -35,13 +50,18 @@ export async function getServerSideProps(context) {
         cp: img.copyright,
         cpl: img.copyright_link,
       },
+      locale,
       timeout: tomorrow.diff(now) + 5000,
       nextKey: tomorrow.format('YYYYMMDD'),
     },
   };
 }
 
-export default function DatePage({ img, timeout, nextKey }) {
+export async function getServerSideProps(context) {
+  return getDatePageProps(context, 'zh-CN');
+}
+
+export default function DatePage({ img, locale = 'zh-CN', timeout, nextKey }) {
   const [loading, setLoading] = useState(true);
   const [showBottom, setShowBottom] = useState(true);
   const [now, setNow] = useState(Date.now());
@@ -51,6 +71,9 @@ export default function DatePage({ img, timeout, nextKey }) {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [hasNext, setHasNext] = useState(img ? img.next : null);
   const [infoExpanded, setInfoExpanded] = useState(true);
+  const normalizedLocale = normalizeLocale(locale);
+  const localePrefix = getLocalePrefix(normalizedLocale);
+  const otherLocale = getOtherLocale(normalizedLocale);
 
   const checkMode = useCallback(() => {
     setIsMobile(window.innerWidth < 1024 || window.innerWidth < window.innerHeight);
@@ -67,8 +90,8 @@ export default function DatePage({ img, timeout, nextKey }) {
       );
     }
     setLoading(true);
-    window.location = `/${target}`;
-  }, [img, hasNext]);
+    window.location = withLocalePath(normalizedLocale, String(target));
+  }, [img, hasNext, normalizedLocale]);
 
   useEffect(() => {
     if (loadingImg.current && loadingImg.current.complete) {
@@ -147,6 +170,7 @@ export default function DatePage({ img, timeout, nextKey }) {
     return `https://earth.google.com/web/search/${encodeURIComponent(match)}`;
   };
   const earthUrl = getLocationSearchUrl(img.cp);
+  const isEnglish = normalizedLocale === EN_LOCALE;
 
   return (
     <Spin spinning={loading} size="large">
@@ -154,8 +178,8 @@ export default function DatePage({ img, timeout, nextKey }) {
         <Head>
           <title>
             {imageTitle && imageTitle.trim()
-              ? `${imageTitle} - 必应壁纸`
-              : '必应壁纸 - 每日精选'}
+              ? `${imageTitle} - ${isEnglish ? 'Bing Wallpaper' : '必应壁纸'}`
+              : isEnglish ? 'Bing Wallpaper - Daily Picks' : '必应壁纸 - 每日精选'}
           </title>
         </Head>
         <img
@@ -231,14 +255,21 @@ export default function DatePage({ img, timeout, nextKey }) {
                     </div>
                   </div>
                   <div className="action-bar">
-                    <a href="/" className="action-item" title="首页">
+                    <a href={localePrefix || '/'} className="action-item" title={isEnglish ? 'Home' : '首页'}>
                       <i className="iconfont icon-bing" />
                     </a>
-                    <div className="action-item" onClick={() => setDownDialogVisible(true)} title="下载壁纸">
+                    <div className="action-item" onClick={() => setDownDialogVisible(true)} title={isEnglish ? 'Download wallpaper' : '下载壁纸'}>
                       <i className="iconfont icon-download" />
                     </div>
-                    <a href="/random" className="action-item" title="随机壁纸">
+                    <a href={`${localePrefix}/random`} className="action-item" title={isEnglish ? 'Random wallpaper' : '随机壁纸'}>
                       <i className="iconfont icon-touzi" />
+                    </a>
+                    <a
+                      href={withLocalePath(otherLocale, String(img.date))}
+                      className="action-item language-action"
+                      title={isEnglish ? '切换到中文' : 'Switch to English'}
+                    >
+                      {isEnglish ? '中' : 'EN'}
                     </a>
                     <div className="action-divider" />
                     {earthUrl && (
@@ -275,6 +306,7 @@ export default function DatePage({ img, timeout, nextKey }) {
         visible={storyDialogVisible}
         onHide={() => setStoryDialogVisible(false)}
         imgInfo={img}
+        locale={normalizedLocale}
       />
     </Spin>
   );

@@ -121,6 +121,12 @@
         color: inherit;
       }
 
+      &.language-toggle {
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0;
+      }
+
       &:hover {
         background: rgba(255, 255, 255, 0.18);
         border-color: rgba(255, 255, 255, 0.25);

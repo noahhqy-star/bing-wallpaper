@@ -1,14 +1,15 @@
 import { getImageByDate } from '../../lib/dataStore';
+import { normalizeLocale } from '../../lib/locale';
 
 export default async function handler(req, res) {
-  const { date } = req.query;
+  const { date, locale = 'zh-CN' } = req.query;
 
   if (!date) {
     return res.status(400).json({ error: '需要提供日期参数' });
   }
 
   try {
-    const imgData = await getImageByDate(date);
+    const imgData = await getImageByDate(date, normalizeLocale(locale));
 
     if (!imgData) {
       return res.status(404).json({ error: '未找到该日期的图片数据' });
