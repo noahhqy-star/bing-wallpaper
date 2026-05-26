@@ -49,10 +49,7 @@ export default function IndexPage({ locale = 'zh-CN' }) {
             gridColumnStart: `span ${span}`,
             gridRowStart: `span ${span}`,
           };
-          item.dateMeta = {
-            year: dayjs(String(item.date), 'YYYYMMDD').format('YYYY'),
-            monthDay: dayjs(String(item.date), 'YYYYMMDD').format('MM.DD'),
-          };
+          item.dateStr = dayjs(String(item.date), 'YYYYMMDD').format('YY.MM.DD');
           item.span = span;
         });
 
@@ -120,10 +117,7 @@ export default function IndexPage({ locale = 'zh-CN' }) {
             <div className="cover">
               <span className="text">{img.copyright}</span>
             </div>
-            <div className={`date-str size-${img.span}`}>
-              <span className="date-year">{img.dateMeta.year}</span>
-              <span className="date-day">{img.dateMeta.monthDay}</span>
-            </div>
+            <div className={`date-str size-${img.span}`}>{img.dateStr}</div>
             <div
               className="img-bg"
               style={{

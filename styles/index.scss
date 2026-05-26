@@ -44,52 +44,32 @@
 
       .date-str {
         position: absolute;
-        top: 12px;
-        left: 12px;
+        top: 10px;
+        left: 10px;
         z-index: 2;
         display: inline-flex;
-        flex-direction: column;
-        gap: 2px;
-        min-width: 58px;
-        padding: 7px 9px 8px;
-        border-radius: 8px;
-        color: rgba(255, 255, 255, 0.9);
-        background: rgba(15, 18, 22, 0.26);
-        border: 1px solid rgba(255, 255, 255, 0.18);
+        align-items: center;
+        padding: 5px 7px;
+        border-radius: 7px;
+        color: rgba(255, 255, 255, 0.76);
+        background: rgba(12, 15, 18, 0.16);
+        border: 1px solid rgba(255, 255, 255, 0.11);
+        font-size: 12px;
+        line-height: 1;
+        font-weight: 650;
         box-shadow:
-          0 8px 22px rgba(0, 0, 0, 0.18),
-          inset 0 1px 0 rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(14px) saturate(1.35);
-        -webkit-backdrop-filter: blur(14px) saturate(1.35);
-        transition: transform 0.3s ease, background 0.3s ease, border-color 0.3s ease;
-
-        .date-year {
-          font-size: 10px;
-          line-height: 1;
-          font-weight: 600;
-          color: rgba(255, 255, 255, 0.62);
-        }
-
-        .date-day {
-          font-size: 17px;
-          line-height: 1;
-          font-weight: 800;
-          color: #fff;
-        }
+          0 6px 16px rgba(0, 0, 0, 0.1),
+          inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(10px) saturate(1.2);
+        -webkit-backdrop-filter: blur(10px) saturate(1.2);
+        transition: opacity 0.3s ease, background 0.3s ease, border-color 0.3s ease;
+        opacity: 0.78;
 
         &.size-2 {
-          top: 16px;
-          left: 16px;
-          min-width: 66px;
-          padding: 8px 10px 9px;
-
-          .date-year {
-            font-size: 11px;
-          }
-
-          .date-day {
-            font-size: 20px;
-          }
+          top: 12px;
+          left: 12px;
+          padding: 6px 8px;
+          font-size: 13px;
         }
       }
 
@@ -117,9 +97,9 @@
         }
 
         .date-str {
-          transform: translateY(-2px);
-          background: rgba(15, 18, 22, 0.38);
-          border-color: rgba(255, 255, 255, 0.26);
+          opacity: 1;
+          background: rgba(12, 15, 18, 0.24);
+          border-color: rgba(255, 255, 255, 0.18);
         }
 
       }
@@ -205,19 +185,12 @@
 
       .img-item {
         .date-str {
-          top: 10px;
-          left: 10px;
-          min-width: 54px;
-          padding: 6px 8px 7px;
-          border-radius: 7px;
-
-          .date-year {
-            font-size: 9px;
-          }
-
-          .date-day {
-            font-size: 16px;
-          }
+          top: 9px;
+          left: 9px;
+          padding: 5px 7px;
+          border-radius: 6px;
+          opacity: 0.72;
+          font-size: 12px;
         }
       }
     }
