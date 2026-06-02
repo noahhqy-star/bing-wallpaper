@@ -44,10 +44,29 @@ async function fetchStory(date) {
   const url = `${STORY_API_URL}?date=${date}&size=1920x1080&imgtype=jpg&type=json`;
   const response = await fetch(url);
 
-  if (!response.ok) return '';
+  if (!response.ok) return { imgdetail: '' };
 
   const data = await response.json();
-  return data && data.imgdetail ? data.imgdetail : '';
+  return {
+    imgdetail: data && data.imgdetail ? data.imgdetail : '',
+    date: data && data.date ? data.date : '',
+    imageKey: imageKey((data && (data.imgurl || data.urlbase || data.url)) || ''),
+  };
+}
+
+function dateKey(value) {
+  return String(value || '').replace(/\D/g, '');
+}
+
+function storyMatchesImage(story, image) {
+  const expectedImageKey = imageKey(image.urlbase || '');
+  const expectedDate = dateKey(image.date);
+  const storyDate = dateKey(story.date);
+
+  if (storyDate && expectedDate && storyDate !== expectedDate) return false;
+  if (!story.imageKey || !expectedImageKey) return false;
+
+  return story.imageKey === expectedImageKey;
 }
 
 async function upsertImage(db, img, now, locale, dateOverride = null) {
@@ -76,17 +95,19 @@ async function upsertImage(db, img, now, locale, dateOverride = null) {
   ).run();
 }
 
-async function fetchMissingStories(db, now) {
+export async function refreshRecentStories(db, now) {
   const { results } = await db.prepare(
-    "SELECT date FROM images WHERE locale = 'zh-CN' AND (imgdetail IS NULL OR imgdetail = '') ORDER BY date DESC LIMIT 10"
+    "SELECT date, urlbase, imgdetail FROM images WHERE locale = 'zh-CN' ORDER BY date DESC LIMIT 10"
   ).all();
 
   for (const row of results || []) {
     const story = await fetchStory(row.date);
-    if (!story) continue;
+    if (!story.imgdetail) continue;
+    if (!storyMatchesImage(story, row)) continue;
+    if (story.imgdetail === (row.imgdetail || '')) continue;
 
     await db.prepare("UPDATE images SET imgdetail = ?, updated_at = ? WHERE date = ? AND locale = 'zh-CN'")
-      .bind(story, now, row.date)
+      .bind(story.imgdetail, now, row.date)
       .run();
   }
 }
@@ -112,9 +133,15 @@ export async function refreshBingImages(env) {
     }
   }
 
-  await fetchMissingStories(env.DB, now);
+  await refreshRecentStories(env.DB, now);
 
   return {
     updated: zhImages.length + enImages.length,
   };
 }
+
+export const _test = {
+  dateKey,
+  imageKey,
+  storyMatchesImage,
+};
